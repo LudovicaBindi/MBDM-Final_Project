@@ -61,10 +61,6 @@ if __name__ == '__main__':
     # series run
     experiments, outcomes = perform_experiments(dike_model, ref_scenario, 5)
 
-    print(experiments)
-    print("#########\n\n\n")
-    print(outcomes)
-
 # multiprocessing
 #    with MultiprocessingEvaluator(dike_model) as evaluator:
 #        results = evaluator.perform_experiments(scenarios=10, policies=policy0,
