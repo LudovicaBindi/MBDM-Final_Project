@@ -31,7 +31,7 @@ def get_model_for_problem_formulation(problem_formulation_id):
     cat_uncert = {'discount rate {}'.format(n): (1.5, 2.5, 3.5, 4.5)
                     for n in function.planning_steps}
     
-    Int_uncert = {'A.0_ID flood wave shape': [0, 132]}
+    Int_uncert = {'A.0_ID flood wave shape': [0, 132]}  #the range should change
     # Range of dike heightening:
     dike_lev = {'DikeIncrease': [0, 10]}    # dm
 
