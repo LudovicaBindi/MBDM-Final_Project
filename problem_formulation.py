@@ -325,7 +325,7 @@ def get_model_for_problem_formulation(problem_formulation_id):
                           variable_name=[var for var in variable_names],
                           function=sum_over, kind=direction))
 
-        outcomes.append(ScalarOutcome('Other.Dikes_Total Investment Costs',
+        outcomes.append(ScalarOutcome('Other.Dikes_Total Dike Investment Costs',
                           variable_name=[var for var in variable_names_],
                           function=sum_over, kind=direction))
         
@@ -397,7 +397,7 @@ def get_model_for_problem_formulation(problem_formulation_id):
                                       variable_name=[var for var in variable_names],
                                       function=sum_over, kind=ScalarOutcome.INFO))
 
-        outcomes.append(ScalarOutcome('Other.Dikes_Total Investment Costs',
+        outcomes.append(ScalarOutcome('Other.Dikes_Total Dike Investment Costs',
                                       variable_name=[var for var in variable_names_],
                                       function=sum_over, kind=ScalarOutcome.INFO))
 
