@@ -335,6 +335,78 @@ def get_model_for_problem_formulation(problem_formulation_id):
         
         # add the outcomes to the model
         dike_model.outcomes = outcomes
+
+    elif problem_formulation_id == 7:
+        '''
+           In our own problem formulation, we keep the dike rings that Overijssel cares about (4 and 5) disaggregated. We
+           aggregate the other dike rings together (1, 2 and 3). We considere the toatl evacuation and RfR costs. We aggregate
+           over the planning steps for every KPI. Moreover, we want to minimize every KPI for the Overijssel province and the
+            total evacuation costs (so the RfR costs and the KPIs for the dike rinks Overijssel is not responsible for are
+            neither minimized nor maximized).
+        '''
+        outcomes = []
+
+        # we keep the KPIs for the dikes of the Overijssel province
+        for dike in function.dikelist:
+            if dike == "A.4" or dike == "A.5":
+                outcomes.append(ScalarOutcome('{}_Dike Investment Costs'.format(dike),
+                                              variable_name=['{}_Dike Investment Costs {}'.format(dike, n)
+                                                             for n in function.planning_steps],
+                                              function=sum_over, kind=direction))
+
+                outcomes.append(ScalarOutcome('{}_Expected Annual Damage'.format(dike),
+                                              variable_name=['{}_Expected Annual Damage {}'.format(dike, n)
+                                                             for n in function.planning_steps],
+                                              function=sum_over, kind=direction))
+
+                outcomes.append(ScalarOutcome('{}_Expected Number of Deaths'.format(dike),
+                                              variable_name=['{}_Expected Number of Deaths {}'.format(
+                                                  dike, n) for n in function.planning_steps],
+                                              function=sum_over, kind=direction))
+
+        # we minimize the overall evacuation costs
+        outcomes.append(ScalarOutcome('Expected Evacuation Costs',
+                                      variable_name=['Expected Evacuation Costs {}'.format(n) for n in
+                                                     function.planning_steps],
+                                      function=sum_over, kind=direction))
+
+        # we ignore the RfR costs
+        outcomes.append(ScalarOutcome('RfR Total Costs',
+                                      variable_name=['RfR Total Costs {}'.format(n)
+                                                     for n in function.planning_steps],
+                                      function=sum_over, kind=ScalarOutcome.INFO))
+
+        # we aggregate over time and over location for the other dikes
+        variable_names = []
+        variable_names_ = []
+        variable_names__ = []
+
+        other_dikes = ["A.1", "A.2", "A.3"]
+
+        for n in function.planning_steps:
+            variable_names.extend(['{}_Expected Annual Damage {}'.format(dike, n)
+                                   for dike in other_dikes])
+
+            variable_names_.extend(['{}_Dike Investment Costs {}'.format(dike, n)
+                                    for dike in other_dikes])
+
+            variable_names__.extend(['{}_Expected Number of Deaths {}'.format(dike, n)
+                                     for dike in other_dikes])
+
+        outcomes.append(ScalarOutcome('Other.Dikes_Expected Annual Damage',
+                                      variable_name=[var for var in variable_names],
+                                      function=sum_over, kind=ScalarOutcome.INFO))
+
+        outcomes.append(ScalarOutcome('Other.Dikes_Total Investment Costs',
+                                      variable_name=[var for var in variable_names_],
+                                      function=sum_over, kind=ScalarOutcome.INFO))
+
+        outcomes.append(ScalarOutcome('Other.Dikes_Expected Number of Deaths',
+                                      variable_name=[var for var in variable_names__],
+                                      function=sum_over, kind=ScalarOutcome.INFO))
+
+        # add the outcomes to the model
+        dike_model.outcomes = outcomes
         
     else:
         raise TypeError('unknownx identifier')
