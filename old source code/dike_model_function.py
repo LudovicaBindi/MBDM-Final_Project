@@ -4,17 +4,16 @@ Created on Tue Oct 31 13:18:05 2017
 
 @author: ciullo
 """
-import copy
-import numpy as np
-import pandas as pd
-
-
+from __future__ import division
+from copy import deepcopy
 from ema_workbench import ema_logging
 
 import funs_generate_network
 from funs_dikes import Lookuplin, dikefailure, init_node
 from funs_economy import cost_fun, discount, cost_evacuation
 from funs_hydrostat import werklijn_cdf, werklijn_inv
+import numpy as np
+import pandas as pd
 
 
 def Muskingum(C1, C2, C3, Qn0_t1, Qn0_t0, Qn1_t0):
@@ -76,15 +75,15 @@ class DikeNetwork(object):
             for n in dikenodes:
                 node = G.nodes[n]
                 # Create a copy of the rating curve that will be used in the sim:
-                node['rnew'] = copy.deepcopy(node['r'])
+                node['rnew'] = deepcopy(node['r'])
 
                 # Initialize outcomes of interest (ooi):
-                node[f'losses {s}'] = []
-                node[f'deaths {s}'] = []
-                node[f'evacuation_costs {s}'] = []
+                node['losses {}'.format(s)] = []
+                node['deaths {}'.format(s)] = []
+                node['evacuation_costs {}'.format(s)] = []
 
             # Initialize room for the river
-            G.nodes[f'RfR_projects {s}']['cost'] = 0
+            G.nodes['RfR_projects {}'.format(s)]['cost'] = 0
         return G
 
     def progressive_height_and_costs(self, G, dikenodes, steps):  
@@ -92,33 +91,32 @@ class DikeNetwork(object):
             node = G.nodes[dike]
             # Rescale according to step and tranform in meters
             for s in steps:
-                node[f'DikeIncrease {s}'] *= self.dh
+                node['DikeIncrease {}'.format(s)] *= self.dh
                 # 1 Initialize fragility curve
                 # 2 Shift it to the degree of dike heigthening:
                 # 3 Calculate cumulative raising
-
-                node['fnew {}'.format(s)] = copy.deepcopy(node['f'])
+                node['fnew {}'.format(s)] = deepcopy(node['f'])
                 node['dikeh_cum {}'.format(s)] = 0
                 
                 for ss in steps[steps <= s]:
-                    node[f'fnew {s}'][:, 0] += node[f'DikeIncrease {ss}']                 
-                    node[f'dikeh_cum {s}'] += node[f'DikeIncrease {ss}']
+                    node['fnew {}'.format(s)][:, 0] += node['DikeIncrease {}'.format(ss)]                 
+                    node['dikeh_cum {}'.format(s)] += node['DikeIncrease {}'.format(ss)]
                 
                 # Calculate dike heigheting costs:
-                if node[f'DikeIncrease {s}'] == 0:
-                    node[f'dikecosts {s}'] = 0
+                if node['DikeIncrease {}'.format(s)] == 0:
+                    node['dikecosts {}'.format(s)] = 0
                 else:
-                    node[f'dikecosts {s}'] = cost_fun(
+                    node['dikecosts {}'.format(s)] = cost_fun(
                                 node['traj_ratio'],
                                 node['c'],
                                 node['b'],
                                 node['lambda'],
-                                node[f'dikeh_cum {s}'],
-                                node[f'DikeIncrease {s}'])
+                                node['dikeh_cum {}'.format(s)],
+                                node['DikeIncrease {}'.format(s)])
 
     def __call__(self, timestep=1, **kwargs):
 
-        G = copy.deepcopy(self.G)
+        G = self.G
         Qpeaks = self.Qpeaks
         dikelist = self.dikelist
 
@@ -141,7 +139,7 @@ class DikeNetwork(object):
                     # (no project) or 1 (yes project)
                     temporal_step = string2.split(' ')[1]
                     
-                    proj_node = G.nodes[f'RfR_projects {temporal_step}']
+                    proj_node = G.nodes['RfR_projects {}'.format(temporal_step)]
                     # Cost of RfR project
                     proj_node['cost'] += kwargs[item] * proj_node[string1][
                         'costs_1e6'] * 1e6
@@ -185,7 +183,7 @@ class DikeNetwork(object):
                     self._initialize_hydroloads(node, time, Q_0)
                     # Calculate critical water level: water above which failure
                     # occurs
-                    node['critWL'] = Lookuplin(node[f'fnew {s}'], 1, 0, node['pfail'])
+                    node['critWL'] = Lookuplin(node['fnew {}'.format(s)], 1, 0, node['pfail'])
 
                 # Run the simulation:
                 # Run over the discharge wave:
@@ -245,22 +243,22 @@ class DikeNetwork(object):
                 # If breaches occured:
                     if node['status'][-1] == True:
                         # Losses per event:
-                        node[f'losses {s}'].append(Lookuplin(node['table'],
+                        node['losses {}'.format(s)].append(Lookuplin(node['table'],
                                                     6, 4, np.max(node['wl'])))
 
-                        node[f'deaths {s}'].append(Lookuplin(node['table'],
+                        node['deaths {}'.format(s)].append(Lookuplin(node['table'],
                                                     6, 3, np.max(node['wl'])) * (
                                     1 - G.nodes['EWS']['evacuation_percentage']))
 
-                        node[f'evacuation_costs {s}'].append(
+                        node['evacuation_costs {}'.format(s)].append(
                                 cost_evacuation(Lookuplin(
                                 node['table'], 6, 5, np.max(node['wl'])
                                 ) * G.nodes['EWS']['evacuation_percentage'],
                                 G.nodes['EWS']['DaysToThreat']))
                     else:
-                        node[f'losses {s}'].append(0)
-                        node[f'deaths {s}'].append(0)
-                        node[f'evacuation_costs {s}'].append(0)
+                        node['losses {}'.format(s)].append(0)
+                        node['deaths {}'.format(s)].append(0)
+                        node['evacuation_costs {}'.format(s)].append(0)
 
             EECosts = []
             # Iterate over the network,compute and store ooi over all events
@@ -268,25 +266,28 @@ class DikeNetwork(object):
                 node = G.nodes[dike]
 
                 # Expected Annual Damage:
-                EAD = np.trapz(node[f'losses {s}'], self.p_exc)
+                EAD = np.trapz(node['losses {}'.format(s)], self.p_exc)
                 # Discounted annual risk per dike ring:
                 disc_EAD = np.sum(discount(EAD, rate=G.nodes[
-                        f'discount rate {s}']['value'], n=self.y_step))
+                        'discount rate {}'.format(s)]['value'], n=self.y_step))
 
                 # Expected Annual number of deaths:
-                END = np.trapz(node[f'deaths {s}'], self.p_exc)
+                END = np.trapz(node['deaths {}'.format(s)], self.p_exc)
 
                 # Expected Evacuation costs: depend on the event, the higher
                 # the event, the more people you have got to evacuate:
-                EECosts.append(np.trapz(node[f'evacuation_costs {s}'], self.p_exc))
+                EECosts.append(np.trapz(node['evacuation_costs {}'.format(s)], self.p_exc))
 
-                data.update({f'{dike}_Expected Annual Damage {s}': disc_EAD,
-                         f'{dike}_Expected Number of Deaths {s}': END,
+                data.update({'{}_Expected Annual Damage {}'.format(dike,s): disc_EAD,
+                         '{}_Expected Number of Deaths {}'.format(dike,s): END,
                          '{}_Dike Investment Costs {}'.format(dike,s
-                                              ): node[f'dikecosts {s}']})
+                                              ): node['dikecosts {}'.format(s)]})
 
-            data.update({f'RfR Total Costs {s}': G.nodes[
-                                f'RfR_projects {s}']['cost'.format(s)]})
-            data.update({f'Expected Evacuation Costs {s}': np.sum(EECosts)})
+            data.update({'RfR Total Costs {}'.format(s): G.nodes[
+                                'RfR_projects {}'.format(s)]['cost'.format(s)]})
+            data.update({'Expected Evacuation Costs {}'.format(s): np.sum(EECosts)})
 
         return data
+
+
+
