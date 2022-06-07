@@ -1,6 +1,10 @@
 # This is a sample Python script.
 
 import warnings
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 warnings.filterwarnings("ignore")
 
 import numpy as np
@@ -10,6 +14,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 sns.set_style('white')
+<<<<<<< HEAD
 import platypus
 
 from ema_workbench import (Model, RealParameter, TimeSeriesOutcome,
@@ -28,6 +33,18 @@ from problem_formulation import get_model_for_problem_formulation
 
 # other libraries needed
 import pandas as pd
+=======
+
+# ema_workbench components needed
+from ema_workbench import (MultiprocessingEvaluator)
+from ema_workbench.em_framework.points import Scenario
+from ema_workbench.analysis import parcoords
+
+# model functions needed
+from problem_formulation import get_model_for_problem_formulation
+
+# other libraries needed
+>>>>>>> origin/master
 import time  # to keep track of the runtime
 
 if __name__ == '__main__':
@@ -35,7 +52,11 @@ if __name__ == '__main__':
     start_time = time.time()
     print('Runtime started')
 
+<<<<<<< HEAD
     problem_formulation = 6
+=======
+    problem_formulation = 3
+>>>>>>> origin/master
     nfe_selection = 5
     epsilon_selection = [0.1]
 
@@ -63,4 +84,16 @@ if __name__ == '__main__':
     results.to_csv("intermediate outputs/optimization output(" +
                    str(nfe_selection) + "," + str(epsilon_selection) + ").csv")
 
+<<<<<<< HEAD
 
+=======
+    # visualization in the parallel coordinate plots
+    data = results.loc[:, [o.name for o in dike_model.outcomes]] # we are keeping just the columns with the outcomes
+    limits = parcoords.get_limits(data) # creates a dataframe where for each outcome it gets the highest and lowest value
+    #limits.loc[0, ['utility', 'inertia', 'reliability', 'max_P']] = 0 # sets the lowerbound of each outcome to 0
+
+    paraxes = parcoords.ParallelAxes(limits) # creates the parallel axes
+    paraxes.plot(data) # put the data on the axes
+    #paraxes.invert_axis('max_P') # flip direction for a particular outcome
+    plt.show() # plots
+>>>>>>> origin/master
