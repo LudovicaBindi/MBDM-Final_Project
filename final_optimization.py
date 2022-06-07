@@ -1,6 +1,7 @@
 # This is a sample Python script.
 
 import warnings
+
 warnings.filterwarnings("ignore")
 
 import numpy as np
@@ -10,24 +11,16 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 sns.set_style('white')
-import platypus
 
-from ema_workbench import (Model, RealParameter, TimeSeriesOutcome,
-                           perform_experiments, Policy,
-                           MultiprocessingEvaluator)
-from ema_workbench.em_framework.evaluators import BaseEvaluator
-
-from ema_workbench.em_framework.evaluators import Samplers
+# ema_workbench components needed
+from ema_workbench import (MultiprocessingEvaluator)
 from ema_workbench.em_framework.points import Scenario
+from ema_workbench.analysis import parcoords
 
-from ema_workbench.analysis import feature_scoring
-from ema_workbench.analysis.scenario_discovery_util import RuleInductionType
-from ema_workbench.em_framework.salib_samplers import get_SALib_problem
-
+# model functions needed
 from problem_formulation import get_model_for_problem_formulation
 
 # other libraries needed
-import pandas as pd
 import time  # to keep track of the runtime
 
 if __name__ == '__main__':
