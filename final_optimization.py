@@ -29,7 +29,7 @@ if __name__ == '__main__':
     print('Runtime started')
 
     problem_formulation = 6
-    nfe_selection = 5
+    nfe_selection = 1000
     epsilon_selection = [0.1]
 
     # our way to set the initial reference scenario: using average
