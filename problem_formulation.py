@@ -10,7 +10,7 @@ from dike_model_function import DikeNetwork  # @UnresolvedImport
 
 
 def sum_over(*args):
-    return sum(args)
+    return float(sum(args))
 
 
 def get_model_for_problem_formulation(problem_formulation_id):
