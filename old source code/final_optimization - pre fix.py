@@ -1,6 +1,5 @@
 # This is a sample Python script.
-# other libraries needed
-import time  # to keep track of the runtime
+
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -8,21 +7,29 @@ warnings.filterwarnings("ignore")
 import numpy as np
 import pandas as pd
 
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.set_style('white')
+
 # ema_workbench components needed
-from ema_workbench import (MultiprocessingEvaluator, Scenario, ema_logging)
+from ema_workbench import (MultiprocessingEvaluator)
+from ema_workbench.em_framework.points import Scenario
+from ema_workbench.analysis import parcoords
 
 # model functions needed
 from problem_formulation import get_model_for_problem_formulation
 
-
-_logger = ema_logging.create_module_logger(__name__)
+# other libraries needed
+import time  # to keep track of the runtime
 
 if __name__ == '__main__':
-    ema_logging.log_to_stderr((ema_logging.INFO))
 
+    start_time = time.time()
+    print('Runtime started')
 
-    problem_formulation = 7
-    nfe_selection = 100000
+    problem_formulation = 6
+    nfe_selection = 5000
     epsilon_selection = [0.1]
 
     # our way to set the initial reference scenario: using average
@@ -37,8 +44,6 @@ if __name__ == '__main__':
 
     dike_model, planning_steps = get_model_for_problem_formulation(problem_formulation)
 
-    start_time = time.time()
-    _logger.info('Runtime started')
     with MultiprocessingEvaluator(dike_model) as evaluator:
         results = evaluator.optimize(nfe=nfe_selection,
                                      reference=Scenario(**ref_scenario_description),
@@ -46,7 +51,7 @@ if __name__ == '__main__':
                                      epsilons=epsilon_selection * len(dike_model.outcomes))
 
     end_time = time.time()
-    _logger.info(f'Runtime ended with duration of {end_time - start_time}')
+    print('Runtime ended with duration of', str(end_time - start_time))
 
     results.to_csv("intermediate outputs/optimization output(" +
                    str(nfe_selection) + "," + str(epsilon_selection) + ").csv")
