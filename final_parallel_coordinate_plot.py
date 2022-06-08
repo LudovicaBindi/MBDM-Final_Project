@@ -6,9 +6,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # read the data
-results = pd.read_csv('intermediate outputs/prova (PF 3).csv')
+results = pd.read_csv('intermediate outputs/optimization output(5000,[0.1]).csv')
 
-dike_model, planning_steps = get_model_for_problem_formulation(3)
+dike_model, planning_steps = get_model_for_problem_formulation(6)
 
 # visualization in the parallel coordinate plots
 

@@ -11,15 +11,16 @@ from problem_formulation import get_model_for_problem_formulation
 
 if __name__ == '__main__':
     # read the data
-    results = pd.read_csv('intermediate outputs/prova (PF 3).csv')
+    results = pd.read_csv('intermediate outputs/optimization output(5000,[0.1]).csv')
 
     # create the dike_model
-    problem_formulation = 3 # WARNING: use the same PF as the ones that you used to create the results csv file!
+    problem_formulation = 6 # WARNING: use the same PF as the ones that you used to create the results csv file!
     dike_model, planning_steps = get_model_for_problem_formulation(problem_formulation)
 
     # select some policies
-    logical = results['A.1_DikeIncrease 1'] < 4
-    policies = results[logical]
+    #logical = results['A.1_DikeIncrease 1'] < 4
+    #policies = results[logical]
+    policies = results # keep everything
     policies = policies.drop([o.name for o in dike_model.outcomes], axis=1);
     policies = policies.drop("Unnamed: 0", axis=1);
 
