@@ -265,6 +265,8 @@ def get_model_for_problem_formulation(problem_formulation_id):
         dike_model.outcomes = outcomes
 
         # our own problem formulation
+
+    # our own problem formulation
     elif problem_formulation_id == 6:
         '''
            In our own problem formulation, we keep the dike rings that Overijssel cares about (4 and 5) disaggregated. We
@@ -279,23 +281,23 @@ def get_model_for_problem_formulation(problem_formulation_id):
                 outcomes.append(ScalarOutcome('{}_Dike Investment Costs'.format(dike),
                                               variable_name=['{}_Dike Investment Costs {}'.format(dike, n)
                                                              for n in function.planning_steps],
-                                              function=sum_over, kind=direction))
+                                              function=sum_over, kind=direction, expected_range=(0, 740000000)))
 
                 outcomes.append(ScalarOutcome('{}_Expected Annual Damage'.format(dike),
                                               variable_name=['{}_Expected Annual Damage {}'.format(dike, n)
                                                              for n in function.planning_steps],
-                                              function=sum_over, kind=direction))
+                                              function=sum_over, kind=direction, expected_range=(0, 400000000)))
 
                 outcomes.append(ScalarOutcome('{}_Expected Number of Deaths'.format(dike),
                                               variable_name=['{}_Expected Number of Deaths {}'.format(
                                                   dike, n) for n in function.planning_steps],
-                                              function=sum_over, kind=direction))
+                                              function=sum_over, kind=direction, expected_range=(0, 0.35)))
 
         # we minimize the overall evacuation costs
         outcomes.append(ScalarOutcome('Expected Evacuation Costs',
                                       variable_name=['Expected Evacuation Costs {}'.format(n) for n in
                                                      function.planning_steps],
-                                      function=sum_over, kind=direction))
+                                      function=sum_over, kind=direction, expected_range=(0, 12000)))
 
         # we ignore the RfR costs
         outcomes.append(ScalarOutcome('RfR Total Costs',
@@ -322,15 +324,15 @@ def get_model_for_problem_formulation(problem_formulation_id):
 
         outcomes.append(ScalarOutcome('Other.Dikes_Expected Annual Damage',
                                       variable_name=[var for var in variable_names],
-                                      function=sum_over, kind=direction))
+                                      function=sum_over, kind=direction, expected_range=(0, 400000000)))
 
         outcomes.append(ScalarOutcome('Other.Dikes_Total Dike Investment Costs',
                                       variable_name=[var for var in variable_names_],
-                                      function=sum_over, kind=direction))
+                                      function=sum_over, kind=direction, expected_range=(0, 740000000)))
 
         outcomes.append(ScalarOutcome('Other.Dikes_Expected Number of Deaths',
                                       variable_name=[var for var in variable_names__],
-                                      function=sum_over, kind=direction))
+                                      function=sum_over, kind=direction, expected_range=(0, 0.35)))
 
         # add the outcomes to the model
         dike_model.outcomes = outcomes

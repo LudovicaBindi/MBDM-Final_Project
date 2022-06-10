@@ -10,6 +10,8 @@ import pandas as pd
 
 # ema_workbench components needed
 from ema_workbench import (MultiprocessingEvaluator, Scenario, ema_logging)
+from ema_workbench.em_framework.optimization import (HyperVolume,
+                                                     EpsilonProgress)
 
 # model functions needed
 from problem_formulation import get_model_for_problem_formulation
@@ -21,7 +23,7 @@ if __name__ == '__main__':
     ema_logging.log_to_stderr((ema_logging.INFO))
 
     problem_formulation = 6
-    nfe_selection = 5
+    nfe_selection = 5000
     epsilon_selection = [0.1]
 
     # our way to set the initial reference scenario: using average
@@ -36,16 +38,20 @@ if __name__ == '__main__':
 
     dike_model, planning_steps = get_model_for_problem_formulation(problem_formulation)
 
+    convergence_metrics = [HyperVolume.from_outcomes(dike_model.outcomes),
+                           EpsilonProgress()]
+
     start_time = time.time()
     _logger.info('Runtime started')
+
     with MultiprocessingEvaluator(dike_model) as evaluator:
-        results = evaluator.optimize(nfe=nfe_selection,
-                                     reference=Scenario(**ref_scenario_description),
-                                     searchover='levers',
-                                     epsilons=epsilon_selection * len(dike_model.outcomes))
+        results, convergence = evaluator.optimize(nfe=nfe_selection, searchover='levers',
+                                                  reference=Scenario(**ref_scenario_description),
+                                                  epsilons=[0.125, 0.05, 0.01, 0.01],
+                                                  convergence=convergence_metrics)
 
     end_time = time.time()
     _logger.info(f'Runtime ended with duration of {end_time - start_time}')
 
-    results.to_csv("intermediate outputs/optimization output(" +
-                   str(nfe_selection) + "," + str(epsilon_selection) + ") - lUDO.csv")
+    results.to_csv("intermediate outputs/optimization + convergence - results.csv")
+    convergence.to_csv("intermediate outputs/optimization + convergence - convergence res.csv")
