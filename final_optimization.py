@@ -21,7 +21,7 @@ if __name__ == '__main__':
     ema_logging.log_to_stderr((ema_logging.INFO))
 
     problem_formulation = 6
-    nfe_selection = 5
+    nfe_selection = 100000
     epsilon_selection = [0.1]
 
     # our way to set the initial reference scenario: using average
