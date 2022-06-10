@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
 
     problem_formulation = 7
-    nfe_selection = 100000
+    nfe_selection = 5000
     epsilon_selection = [0.1]
 
     # our way to set the initial reference scenario: using average
@@ -49,4 +49,4 @@ if __name__ == '__main__':
     _logger.info(f'Runtime ended with duration of {end_time - start_time}')
 
     results.to_csv("intermediate outputs/optimization output(" +
-                   str(nfe_selection) + "," + str(epsilon_selection) + ").csv")
+                   str(nfe_selection) + "," + str(epsilon_selection) + ") - lUDO.csv")
