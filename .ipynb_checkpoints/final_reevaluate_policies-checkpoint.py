@@ -12,24 +12,17 @@ from problem_formulation import get_model_for_problem_formulation
 if __name__ == '__main__':
     # read the data
     results = pd.read_csv('intermediate outputs/optimization output(100000,[0.1]) - lUDO.csv')
-    results = results.drop(columns=['Unnamed: 0'])  # cleaning
 
     # create the dike_model
     problem_formulation = 6 # WARNING: use the same PF as the ones that you used to create the results csv file!
     dike_model, planning_steps = get_model_for_problem_formulation(problem_formulation)
 
-    # select the columns to keep (the ones with the levers)
-    to_drop = []
-    for column in results.columns:
-        to_drop.append(column)
-    for o in dike_model.levers:
-        to_drop.remove(o.name)
-
     # select some policies
-    # logical = results['A.1_DikeIncrease 1'] < 4
-    # policies = results[logical]
-    policies = results  # keep everything
-    policies = policies.drop([column for column in to_drop], axis=1);
+    #logical = results['A.1_DikeIncrease 1'] < 4
+    #policies = results[logical]
+    policies = results # keep everything
+    policies = policies.drop([o.name for o in dike_model.outcomes], axis=1);
+    policies = policies.drop("Unnamed: 0", axis=1);
 
     # prepare the policies for the experiments
     policies_to_evaluate = []
@@ -40,7 +33,7 @@ if __name__ == '__main__':
     print('Runtime started')
 
     # run the experiments
-    n_scenarios = 100
+    n_scenarios = 2
     with MultiprocessingEvaluator(dike_model) as evaluator:
         experiments, outcomes = evaluator.perform_experiments(n_scenarios,
                                                 policies_to_evaluate)

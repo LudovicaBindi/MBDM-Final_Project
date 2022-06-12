@@ -23,7 +23,7 @@ if __name__ == '__main__':
     ema_logging.log_to_stderr((ema_logging.INFO))
 
     problem_formulation = 6
-    nfe_selection = 3
+    nfe_selection = 5000
     epsilon_selection = [0.1]
 
     # our way to set the initial reference scenario: using average
@@ -52,9 +52,6 @@ if __name__ == '__main__':
 
     end_time = time.time()
     _logger.info(f'Runtime ended with duration of {end_time - start_time}')
-
-    print(type(results))
-    print(type(convergence))
 
     results.to_csv("intermediate outputs/optimization + convergence - results.csv")
     convergence.to_csv("intermediate outputs/optimization + convergence - convergence res.csv")
