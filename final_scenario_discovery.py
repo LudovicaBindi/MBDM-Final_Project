@@ -86,7 +86,7 @@ plt.show()
 
 
 # %%
-box.inspect_tradeoff()
+#box.inspect_tradeoff()
 
 
 # %%
@@ -122,3 +122,46 @@ a_file = open("intermediate outputs/prim results - outcomes in box.pkl", "wb")
 pickle.dump(outcomes_in_box, a_file)
 a_file.close()
 
+
+# %% [markdown]
+# ### Multiscenario MORDM
+
+# %% [markdown]
+# ### best case, worst case
+
+# %%
+from ema_workbench.analysis import parcoords
+
+# conditional on y
+data = pd.DataFrame({k:v[y] for k,v in outcomes.items()})
+all_data = pd.DataFrame({k:v for k,v in outcomes.items()})
+
+selected_data = all_data[['A.4_Expected Number of Deaths','A.5_Expected Number of Deaths','Other.Dikes_Expected Number of Deaths']]
+
+limits = parcoords.get_limits(selected_data)
+plt.rcParams["figure.figsize"] = (15,7)
+axes = parcoords.ParallelAxes(limits)
+axes.plot(all_data, color='lightgrey')
+axes.plot(data, color='blue')
+#axes.invert_axis('A.4_Dike Investment Costs')
+plt.show()
+
+# %%
+print(selected_data.idxmax())
+print(selected_data.idxmin())
+
+# %%
+# we define the worst case scenario as the one where all outsomes have the maximum values
+
+# also all we need are the uncertainty columns
+selected = experiments.loc[[887,2476,863], ['A.0_ID flood wave shape', 'A.1_Bmax', 'A.1_Brate',
+       'A.1_pfail', 'A.2_Bmax', 'A.2_Brate', 'A.2_pfail', 'A.3_Bmax',
+       'A.3_Brate', 'A.3_pfail', 'A.4_Bmax', 'A.4_Brate', 'A.4_pfail',
+       'A.5_Bmax', 'A.5_Brate', 'A.5_pfail', 'discount rate 0',
+       'discount rate 1', 'discount rate 2']]
+selected
+
+# %%
+selected.to_csv('intermediate outputs/worst_case_scenarios.csv')
+
+# %%
