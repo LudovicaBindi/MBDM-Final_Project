@@ -23,6 +23,17 @@ Released by: EPA1361 Group 23
 
 Version:
 2.0
+---
+
+## TEMPORARY GUIDE FOR THIS PROJECT
+Important files:
++ problem_formulatuon.py : to specify our PFs
++ final_optimization.py : to run a single optimization
++ final_reevaluate_policies.py : to re-evaluate the policies
++ final_compute_robustness.ipynb : to compute the robustness of the policies
++ final_scenario_discovery.ipynb : to do a scenario discovery
+
+...
 
 ---
 
