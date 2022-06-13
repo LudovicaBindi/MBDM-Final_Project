@@ -14,20 +14,46 @@ outcomes_file = open("intermediate outputs/first evaluation - outcomes descripti
 outcomes = pickle.load(outcomes_file)
 
 # %%
-import csv
-with open('intermediate outputs/first evaluation - experiments description.csv', 'r') as file:
-    reader = csv.reader(file)
+outcomes
+
+# %%
+outcomes.keys()
+
+# %%
+#import csv
+#with open('intermediate outputs/first evaluation - experiments description.csv', 'r') as file:
+#    reader = csv.reader(file)
+
+# %%
+import pandas as pd
+experiments = pd.read_csv('intermediate outputs/first evaluation - experiments description.csv')
+
+# %%
+experiments.head()
+
+# %%
+experiments.columns
 
 # %%
 from ema_workbench.analysis import prim
 
 
 # %% [markdown]
-# use a threshold of 0.1 safety 
+# #use a threshold of 0.1 for number of deaths
 
 # %%
-x = experiments.drop(columns=['policy', 'c1','c2', 'r1', 'r2', 'w1'])
-y = outcomes['utility'] < 0.35  # the code is taken from exercise 8, instead of 'utility' we should use the outcome that is
+y = []
+for i in range(len(outcomes['A.4_Expected Number of Deaths'])):
+    if outcomes['A.4_Expected Number of Deaths'][i] < 0.1 and outcomes['A.5_Expected Number of Deaths'][i] < 0.1 :
+        y.append(True)
+    else:
+        y.append(False)
+y
+
+# %%
+x = experiments.drop(columns=['scenario','policy','model'])
+for
+y = outcomes['A.4_Expected Number of Deaths'] < 0.1 and outcomes['A.5_Expected Number of Deaths'] < 0.1# the code is taken from exercise 8, instead of 'utility' we should use the outcome that is
                                 # on our interest and also instead of 0.35 we should define the threshold that suits our case.
 
 prim_alg = prim.Prim(x,y, threshold=0.5) # x is the dataframe with the independent variables, y is the dependent variable,
