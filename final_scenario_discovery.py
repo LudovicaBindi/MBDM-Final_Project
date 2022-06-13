@@ -42,21 +42,28 @@ from ema_workbench.analysis import prim
 # #use a threshold of 0.1 for number of deaths
 
 # %%
-y = []
+outcomes_prim = []
 for i in range(len(outcomes['A.4_Expected Number of Deaths'])):
-    if outcomes['A.4_Expected Number of Deaths'][i] < 0.1 and outcomes['A.5_Expected Number of Deaths'][i] < 0.1 :
-        y.append(True)
+    if outcomes['A.4_Expected Number of Deaths'][i] > 0.1 and outcomes['A.5_Expected Number of Deaths'][i] > 0.1 :
+        outcomes_prim.append(True)
     else:
-        y.append(False)
-y
+        outcomes_prim.append(False)
+outcomes_prim
 
 # %%
-x = experiments.drop(columns=['scenario','policy','model'])
-for
-y = outcomes['A.4_Expected Number of Deaths'] < 0.1 and outcomes['A.5_Expected Number of Deaths'] < 0.1# the code is taken from exercise 8, instead of 'utility' we should use the outcome that is
-                                # on our interest and also instead of 0.35 we should define the threshold that suits our case.
+x = experiments.drop(columns=[0_RfR 0', '0_RfR 1', '0_RfR 2',
+       '1_RfR 0', '1_RfR 1', '1_RfR 2', '2_RfR 0', '2_RfR 1', '2_RfR 2',
+       '3_RfR 0', '3_RfR 1', '3_RfR 2', '4_RfR 0', '4_RfR 1', '4_RfR 2',
+       'EWS_DaysToThreat', 'A.1_DikeIncrease 0', 'A.1_DikeIncrease 1',
+       'A.1_DikeIncrease 2', 'A.2_DikeIncrease 0', 'A.2_DikeIncrease 1',
+       'A.2_DikeIncrease 2', 'A.3_DikeIncrease 0', 'A.3_DikeIncrease 1',
+       'A.3_DikeIncrease 2', 'A.4_DikeIncrease 0', 'A.4_DikeIncrease 1',
+       'A.4_DikeIncrease 2', 'A.5_DikeIncrease 0', 'A.5_DikeIncrease 1',
+       'A.5_DikeIncrease 2', 'scenario', 'policy', 'model'])
+y = outcomes_prim # the code is taken from exercise 8, instead of 'utility' we should use the outcome that is
+#y =  outcomes['A.4_Expected Number of Deaths'] > 0.1                               # on our interest and also instead of 0.35 we should define the threshold that suits our case.
 
-prim_alg = prim.Prim(x,y, threshold=0.5) # x is the dataframe with the independent variables, y is the dependent variable,
+prim_alg = prim.Prim(x,y, threshold=0.8) # x is the dataframe with the independent variables, y is the dependent variable,
                                          # and threshold is the density that a box needs to meet 
 box = prim_alg.find_box()
 
