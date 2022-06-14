@@ -3,8 +3,8 @@
 # %% [markdown]
 #
 # #### Perform Scenario Discovery
-# ### By performing Scenario Discovery we basically assess the uncertain conditions under which our policies perform poorly.
-# ### For that we are going to use the PRIM algorithm.
+# ##### By performing Scenario Discovery we basically assess the uncertain conditions under which our policies perform poorly.
+# ##### For that we are going to use the PRIM algorithm.
 
 # %%
 import pickle
@@ -127,7 +127,7 @@ a_file.close()
 # ### Multiscenario MORDM
 
 # %% [markdown]
-# ### best case, worst case
+# #### worst case
 
 # %%
 from ema_workbench.analysis import parcoords
