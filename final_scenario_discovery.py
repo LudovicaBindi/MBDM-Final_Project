@@ -47,6 +47,14 @@ ema_logging.log_to_stderr(ema_logging.INFO)
 # #use a threshold of 0.1 for number of deaths
 
 # %%
+count = 0
+for i in outcomes_prim:
+    if i is True:
+        count =+ 1
+        
+print((count/len(outcomes_prim)*100))
+
+# %%
 outcomes_prim = []
 for i in range(len(outcomes['A.4_Expected Number of Deaths'])):
     if outcomes['A.4_Expected Number of Deaths'][i] > 0.001 and outcomes['A.5_Expected Number of Deaths'][i] > 0.001 :
