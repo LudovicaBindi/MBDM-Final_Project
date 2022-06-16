@@ -10,7 +10,7 @@
 import pickle
 
 # %%
-outcomes_file = open("intermediate outputs/first evaluation - outcomes description.pkl", "rb")
+outcomes_file = open("intermediate outputs/step2 - first re-evaluation - outcomes description.pkl", "rb")
 outcomes = pickle.load(outcomes_file)
 
 # %%
@@ -24,12 +24,12 @@ outcomes.keys()
 
 # %%
 #import csv
-#with open('intermediate outputs/first evaluation - experiments description.csv', 'r') as file:
+#with open('intermediate outputs/step2 - first re-evaluation - experiments description.csv', 'r') as file:
 #    reader = csv.reader(file)
 
 # %%
 import pandas as pd
-experiments = pd.read_csv('intermediate outputs/first evaluation - experiments description.csv')
+experiments = pd.read_csv('intermediate outputs/step2 - first re-evaluation - experiments description.csv')
 
 # %%
 experiments.head()
@@ -117,8 +117,8 @@ type( outcomes_in_box)
 
 # %%
 #save the results
-scens_in_box.to_csv('intermediate outputs/prim results - scens in box.csv')
-a_file = open("intermediate outputs/prim results - outcomes in box.pkl", "wb")
+scens_in_box.to_csv('intermediate outputs/step4 - prim results - scens in box.csv')
+a_file = open("intermediate outputs/step4 - prim results - outcomes in box.pkl", "wb")
 pickle.dump(outcomes_in_box, a_file)
 a_file.close()
 

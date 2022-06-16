@@ -11,7 +11,7 @@ from problem_formulation import get_model_for_problem_formulation
 
 if __name__ == '__main__':
     # read the data
-    results = pd.read_csv('intermediate outputs/optimization output(100000,[0.1]) - lUDO.csv')
+    results = pd.read_csv('intermediate outputs/step1 - first optimization output(100000,[0.1]).csv')
 
     # create the dike_model
     problem_formulation = 6 # WARNING: use the same PF as the ones that you used to create the results csv file!
@@ -42,10 +42,10 @@ if __name__ == '__main__':
     print('Runtime ended with duration of', str(end_time - start_time))
 
     # save the experiments as a csv file
-    experiments.to_csv("intermediate outputs/first evaluation - experiments description.csv")
+    experiments.to_csv("intermediate outputs/step2 - first re-evaluation - experiments description.csv")
 
     # save the outcomes to a pickle file (outcomes is a dictionary)
-    a_file = open("intermediate outputs/first evaluation - outcomes description.pkl", "wb")
+    a_file = open("intermediate outputs/step2 - first re-evaluation - outcomes description.pkl", "wb")
     pickle.dump(outcomes, a_file)
     a_file.close()
     # to read back our dictionary: https://www.adamsmith.haus/python/answers/how-to-save-a-dictionary-to-a-file-in-python
