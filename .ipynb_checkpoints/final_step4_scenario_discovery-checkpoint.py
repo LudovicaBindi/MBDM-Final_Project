@@ -2,57 +2,28 @@
 # coding: utf-8
 # %% [markdown]
 #
-# #### Perform Scenario Discovery
-# ##### By performing Scenario Discovery we basically assess the uncertain conditions under which our policies perform poorly.
-# ##### For that we are going to use the PRIM algorithm.
+# ### Scenario Discovery
 
 # %%
 import pickle
+# read the outcomes of the previous policy re-evaluation (step2)
 
-# %%
 outcomes_file = open("intermediate outputs/step2 - first re-evaluation - outcomes description.pkl", "rb")
-outcomes = pickle.load(outcomes_file)
+
+outcomes = pickle.load(outcomes_file) # outcomes is a dictionary
 
 # %%
-outcomes
-
-# %%
-outcomes['A.4_Expected Number of Deaths']
-
-# %%
-outcomes.keys()
-
-# %%
-#import csv
-#with open('intermediate outputs/step2 - first re-evaluation - experiments description.csv', 'r') as file:
-#    reader = csv.reader(file)
-
-# %%
+# read the experiments' results from the previous policy re-evaluation (step2)
 import pandas as pd
+
 experiments = pd.read_csv('intermediate outputs/step2 - first re-evaluation - experiments description.csv')
-
-# %%
-experiments.head()
-
-# %%
-experiments.columns
 
 # %%
 from ema_workbench.analysis import prim
 from ema_workbench import MultiprocessingEvaluator, ema_logging
+
 ema_logging.log_to_stderr(ema_logging.INFO)
 
-
-# %% [markdown]
-# #use a threshold of 0.1 for number of deaths
-
-# %%
-count = 0
-for i in outcomes_prim:
-    if i is True:
-        count =+ 1
-        
-print((count/len(outcomes_prim)*100))
 
 # %%
 outcomes_prim = []
@@ -64,10 +35,19 @@ for i in range(len(outcomes['A.4_Expected Number of Deaths'])):
 outcomes_prim
 
 # %%
-import numpy as np
-outcomes_prim = np.asarray(outcomes_prim)
+count = 0
+for i in outcomes_prim:
+    if i is True:
+        count =+ 1
+        
+print((count/len(outcomes_prim)*100))
 
 # %%
+import numpy as np
+outcomes_prim = np.asarray(outcomes_prim) #convert into an array
+
+# %%
+# run the PRIM algorithm
 x = experiments.drop(columns=['0_RfR 0', '0_RfR 1', '0_RfR 2',
        '1_RfR 0', '1_RfR 1', '1_RfR 2', '2_RfR 0', '2_RfR 1', '2_RfR 2',
        '3_RfR 0', '3_RfR 1', '3_RfR 2', '4_RfR 0', '4_RfR 1', '4_RfR 2',
@@ -77,11 +57,9 @@ x = experiments.drop(columns=['0_RfR 0', '0_RfR 1', '0_RfR 2',
        'A.3_DikeIncrease 2', 'A.4_DikeIncrease 0', 'A.4_DikeIncrease 1',
        'A.4_DikeIncrease 2', 'A.5_DikeIncrease 0', 'A.5_DikeIncrease 1',
        'A.5_DikeIncrease 2','policy'])
-y = outcomes_prim # the code is taken from exercise 8, instead of 'utility' we should use the outcome that is
-#y =  outcomes['A.4_Expected Number of Deaths'] > 0.1                               # on our interest and also instead of 0.35 we should define the threshold that suits our case.
-
-prim_alg = prim.Prim(x,y, threshold=0.5) # x is the dataframe with the independent variables, y is the dependent variable,
-                                         # and threshold is the density that a box needs to meet 
+y = outcomes_prim 
+prim_alg = prim.Prim(x,y, threshold=0.5) 
+                                         
 box = prim_alg.find_box()
 
 
@@ -94,34 +72,21 @@ plt.show()
 
 
 # %%
-#box.inspect_tradeoff()
-
-
-# %%
-box.peeling_trajectory
+box.peeling_trajectory #investigating the coverage and density values for all boxes
 
 # %%
-box.inspect(36) # the code is taken from assignment 8, the number in the parenthesis is the number of the box we choose
-                # this choice has to made by us
+#explore the characteristics of the chosen box
+box.inspect(36) 
 box.select(36)
 box.inspect(style='graph')
 plt.show()
 
 
 # %%
-#--- Save scenarios and outcomes of the box  #the following code is from last year's report about saving the results
+#Save the results
 scens_in_box = experiments.iloc[box.yi]
 outcomes_in_box = {k:v[box.yi] for k,v in outcomes.items()}
 
-
-# %%
-scens_in_box
-
-# %%
-outcomes_in_box.items()
-
-# %%
-type( outcomes_in_box)
 
 # %%
 #save the results
@@ -131,16 +96,12 @@ pickle.dump(outcomes_in_box, a_file)
 a_file.close()
 
 
-# %% [markdown]
-# ### Multiscenario MORDM
-
-# %% [markdown]
-# #### worst case
-
 # %%
+#identify the worst-case scenario
+
 from ema_workbench.analysis import parcoords
 
-# conditional on y
+
 data = pd.DataFrame({k:v[y] for k,v in outcomes.items()})
 all_data = pd.DataFrame({k:v for k,v in outcomes.items()})
 
@@ -151,17 +112,17 @@ plt.rcParams["figure.figsize"] = (15,7)
 axes = parcoords.ParallelAxes(limits)
 axes.plot(all_data, color='lightgrey')
 axes.plot(data, color='blue')
-#axes.invert_axis('A.4_Dike Investment Costs')
+
 plt.show()
 
 # %%
+# print the indices of the scenarios in which the death numbers of dikes 4 and 5 as well as of the rest dikes are the maximum
+# and the minimum respectively
 print(selected_data.idxmax())
 print(selected_data.idxmin())
 
 # %%
-# we define the worst case scenario as the one where all outsomes have the maximum values
-
-# also all we need are the uncertainty columns
+# keep only the uncertainty columns
 selected = experiments.loc[[887,2476,863], ['A.0_ID flood wave shape', 'A.1_Bmax', 'A.1_Brate',
        'A.1_pfail', 'A.2_Bmax', 'A.2_Brate', 'A.2_pfail', 'A.3_Bmax',
        'A.3_Brate', 'A.3_pfail', 'A.4_Bmax', 'A.4_Brate', 'A.4_pfail',
@@ -170,6 +131,5 @@ selected = experiments.loc[[887,2476,863], ['A.0_ID flood wave shape', 'A.1_Bmax
 selected
 
 # %%
+# save the results 
 selected.to_csv('intermediate outputs/step4 - prim results - worst case scenarios.csv')
-
-# %%

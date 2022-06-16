@@ -1,3 +1,5 @@
+# #### Optimize for the worst case scenarios
+
 # import libraries
 from ema_workbench import MultiprocessingEvaluator, ema_logging
 from ema_workbench import Scenario
