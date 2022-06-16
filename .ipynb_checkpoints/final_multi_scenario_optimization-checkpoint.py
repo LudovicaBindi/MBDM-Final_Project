@@ -7,7 +7,7 @@ from problem_formulation import get_model_for_problem_formulation
 import pandas as pd
 if __name__ == '__main__':
     # reading the scenarios
-    selected = pd.read_csv("intermediate outputs/worst_case_scenarios.csv")
+    selected = pd.read_csv("intermediate outputs/step4 - prim results - worst case scenarios.csv")
     scenarios = [Scenario(f"{index}", **row) for index, row in selected.iterrows()]
 
     # create the model
@@ -31,6 +31,6 @@ if __name__ == '__main__':
 
         res = optimize(scenario, 100000, dike_model, epsilons)
 
-        res.to_csv("intermediate outputs/multi scenario optimization results/" + str(scenario.name) + " optimization results.csv")
+        res.to_csv("intermediate outputs/step5 - multi scenario optimization results/" + str(scenario.name) + " optimization results.csv")
 
         results.append(res)

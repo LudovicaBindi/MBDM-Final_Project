@@ -14,9 +14,9 @@ if __name__ == '__main__':
 # %%
 
 
-    #results_0 = pd.read_csv('intermediate outputs/multi scenario optimization results/0 optimization results.csv')
-    #results_1 = pd.read_csv('intermediate outputs/multi scenario optimization results/1 optimization results.csv')
-    #results_2 = pd.read_csv('intermediate outputs/multi scenario optimization results/2 optimization results.csv')
+    #results_0 = pd.read_csv('intermediate outputs/step5 - multi scenario optimization results/step5 - 0 optimization results.csv')
+    #results_1 = pd.read_csv('intermediate outputs/step5 - multi scenario optimization results/step5 - 1 optimization results.csv')
+    #results_2 = pd.read_csv('intermediate outputs/step5 - multi scenario optimization results/step5 - 2 optimization results.csv')
 
 
 # %%
@@ -31,7 +31,7 @@ if __name__ == '__main__':
     # putting the results of the worst case scenarios' optimization in a list
     results = []
     for i in range(3):
-        read_results= pd.read_csv("intermediate outputs/multi scenario optimization results/" + str(i) + " optimization results.csv")
+        read_results= pd.read_csv("intermediate outputs/step5 - multi scenario optimization results/" + str(i) + " optimization results.csv")
         #print(len(read_results))
         results.append(read_results)
 
@@ -189,7 +189,7 @@ if __name__ == '__main__':
 
 
     #save the results
-    experiments.to_csv("intermediate outputs/second evaluation - experiments description new.csv")
+    experiments.to_csv("intermediate outputs/step6 - second re-evaluation - experiments description.csv")
 
     # save the outcomes to a pickle file (outcomes is a dictionary)
     a_file = open("intermediate outputs/second evaluation - outcomes description new.pkl", "wb")
