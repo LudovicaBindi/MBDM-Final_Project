@@ -11,6 +11,12 @@ import pandas as pd # to deal with csv files
 import pickle # to save dictionaries
 import time  # to keep track of the runtime
 
+'''
+    In this script we re-evaluate the policies found in the previous step (optimization under the reference scenario).
+    We sample 100 scenarios and we evaluate the policies under each of these scenarios. The results are saved in a
+    csv file for further analysis.
+'''
+
 if __name__ == '__main__':
 
     # read the policies found via the first optimization

@@ -119,7 +119,7 @@ print('Runtime started')
 from ema_workbench import ema_logging
 ema_logging.log_to_stderr(ema_logging.INFO)
 
-with MultiprocessingEvaluator(dike_model) as evaluator:4
+with MultiprocessingEvaluator(dike_model) as evaluator:
     experiments,outcomes = evaluator.perform_experiments(100, policies=policies)
 
 end_time = time.time()
