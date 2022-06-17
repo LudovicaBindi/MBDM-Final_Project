@@ -2,7 +2,7 @@
 # coding: utf-8
 # %% [markdown]
 #
-# ### Scenario Discovery
+# Scenario Discovery
 
 # %%
 import pickle
@@ -62,6 +62,9 @@ prim_alg = prim.Prim(x,y, threshold=0.5)
                                          
 box = prim_alg.find_box()
 
+
+# %%
+x
 
 # %%
 #plot density vs coverage
