@@ -1,14 +1,10 @@
-# #### Optimize for the worst case scenarios
+#Optimize for the worst case scenario
+'''
+    After having identified the worst case scenarios (those with the maximum death outcomes) we are going to optimize for them.
+'''
 
-# import libraries
-from ema_workbench import MultiprocessingEvaluator, ema_logging
-from ema_workbench import Scenario
-
-from problem_formulation import get_model_for_problem_formulation
-
-import pandas as pd
 if __name__ == '__main__':
-    # reading the scenarios
+    # read the worst-case scenarios
     selected = pd.read_csv("intermediate outputs/step4 - prim results - worst case scenarios.csv")
     scenarios = [Scenario(f"{index}", **row) for index, row in selected.iterrows()]
 
@@ -17,6 +13,8 @@ if __name__ == '__main__':
 
     ema_logging.log_to_stderr(ema_logging.INFO)
 
+
+    # run the optimization code
     def optimize(scenario, nfe, model, epsilons):
 
         with MultiprocessingEvaluator(model) as evaluator:
@@ -25,7 +23,7 @@ if __name__ == '__main__':
                                          reference=scenario)
         return results
 
-
+    #save the results
     results = []
     for scenario in scenarios:
 

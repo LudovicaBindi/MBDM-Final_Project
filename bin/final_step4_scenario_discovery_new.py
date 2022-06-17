@@ -1,14 +1,11 @@
-#!/usr/bin/env python
-# coding: utf-8
-# %% [markdown]
-#
+
 # Scenario Discovery
 
 # %%
 import pickle
 # read the outcomes of the previous policy re-evaluation (step2)
 
-outcomes_file = open("intermediate outputs/step2 - first re-evaluation - outcomes description.pkl", "rb")
+outcomes_file = open("../intermediate outputs/step2 - first re-evaluation - outcomes description.pkl", "rb")
 
 outcomes = pickle.load(outcomes_file) # outcomes is a dictionary
 
@@ -16,7 +13,7 @@ outcomes = pickle.load(outcomes_file) # outcomes is a dictionary
 # read the experiments' results from the previous policy re-evaluation (step2)
 import pandas as pd
 
-experiments = pd.read_csv('intermediate outputs/step2 - first re-evaluation - experiments description.csv')
+experiments = pd.read_csv('../intermediate outputs/step2 - first re-evaluation - experiments description.csv')
 
 # %%
 from ema_workbench.analysis import prim
@@ -94,7 +91,7 @@ outcomes_in_box = {k:v[box.yi] for k,v in outcomes.items()}
 # %%
 #save the results
 scens_in_box.to_csv('intermediate outputs/step4 - prim results - scens in box.csv')
-a_file = open("intermediate outputs/step4 - prim results - outcomes in box.pkl", "wb")
+a_file = open("../intermediate outputs/step4 - prim results - outcomes in box.pkl", "wb")
 pickle.dump(outcomes_in_box, a_file)
 a_file.close()
 
