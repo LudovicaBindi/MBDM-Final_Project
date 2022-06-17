@@ -1,24 +1,21 @@
-#!/usr/bin/env python
-# coding: utf-8
-# %% [markdown]
-#
-# #### Re-evalute the policies after the optimization of the worst-case scenarios
-
 # %%
+
+# Re-evalute the policies after the optimization of the worst-case scenarios
+
+'''
+    After having optimized based on the worst-case scenarios we continue with the re-evaluation of the policies.
+'''
 if __name__ == '__main__':
     import pandas as pd
 
-
-# %%
-# putting the results of the worst case scenarios' optimization in a list
+# read the results of the optimization(step5)
 results = []
 for i in range(3):
     read_results= pd.read_csv("intermediate outputs/step5 - multi scenario optimization results/step5 - " + str(i) + " optimization results.csv")
     results.append(read_results)
 
- # %%
- #select policies
-import pandas as pd
+
+# concatenate the results in a Dataframe
 tpm = pd.concat([results[0], results[1]])
 tpm = pd.concat([tpm, results[2]])
 tpm
@@ -119,7 +116,7 @@ print('Runtime started')
 from ema_workbench import ema_logging
 ema_logging.log_to_stderr(ema_logging.INFO)
 
-with MultiprocessingEvaluator(dike_model) as evaluator:4
+with MultiprocessingEvaluator(dike_model) as evaluator:
     experiments,outcomes = evaluator.perform_experiments(100, policies=policies)
 
 end_time = time.time()
