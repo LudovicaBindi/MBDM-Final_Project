@@ -34,21 +34,16 @@ To plot the pictures:
 
 ## Files
 
-EPA1352-G03-A3
-│   |   README.md                       # this markdown document 
-│   |   
-
-└───report
-│   │   report.pdf                  # report of our analysis
-│
-└───data                            # contains datasets used by the model functions
-│   
-└───intermediate outputs            # contains datasets to pass results from one step to the followings
-|   └───step5 - multi scenario optimization results # contains the results of step 5
-|   └───bin                         # older versions of the results
-└───output pictures                 # contains the pictures created for the analysis
-│   
-└───bin                             # contains older versions of the final files and temporary files
+MBDM-Final_Project
+* README.md: _this markdown document_ 
+* <b>report</b>
+    * report.pdf                  # report of our analysis
+* _data_                            # contains datasets used by the model functions
+* _intermediate outputs_            # contains datasets to pass results from one step to the followings
+    * step5 - multi scenario optimization results # contains the results of step 5
+    * bin                         # older versions of the results
+* _output pictures_                 # contains the pictures created for the analysis
+* _bin_                             # contains older versions of the final files and temporary files
 
 ## Reference
 Bartholomew, E., & Kwakkel, J. H. (2020). On considering robustness in the search phase of Robust Decision Making: A comparison of Many-Objective Robust Decision Making, multi-scenario Many-Objective Robust Decision Making, and Many Objective Robust Optimization. In Environmental Modelling & Software (Vol. 127, p. 104699). Elsevier BV. https://doi.org/10.1016/j.envsoft.2020.104699
